@@ -77,8 +77,14 @@ class DFDModel(BaseModel):
             self.img_real = torch.autograd.Variable(self.img_real)
             self.aud_real = torch.autograd.Variable(self.aud_real)
 
+
         self.aud_real_feat = self.netG_audio(self.aud_real.squeeze(0))
         self.img_real_feat = self.netG_video(self.img_real.squeeze(0))
+        
+        # print(f"aud_real_feat shape: {self.aud_real_feat.shape}")
+        # print(f"img_real_feat shape: {self.img_real_feat.shape}")
+    
+
 
     def backward_G(self):
         audio_real = self.aud_real_feat

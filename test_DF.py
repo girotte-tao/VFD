@@ -4,6 +4,15 @@ from models import create_model
 from tqdm import tqdm
 import numpy as np
 import torch
+from sklearn.metrics import roc_auc_score, accuracy_score
+
+
+# import subprocess
+
+# print("Running preprocess_dataset.py ...")
+# subprocess.run(["python", "preprocess_dataset1.py"])
+# print("preprocess_dataset.py finished.")
+
 
 
 def auc(real, fake):
@@ -15,9 +24,22 @@ def auc(real, fake):
     for ind in fake:
         target_all.append(0)
         label_all.append(-ind)
+    # print("length: target = ",len(target_all)," label = ",len(label_all))
 
-    from sklearn.metrics import roc_auc_score
+    # from sklearn.metrics import roc_auc_score
+    # return roc_auc_score(target_all, label_all)
+    
+    print("length: target = ",len(target_all)," label = ",len(label_all))
+    # print("target = ",target_all," label = ",label_all)
     return roc_auc_score(target_all, label_all)
+
+
+def compute_accuracy(real, fake, threshold= 1451.34):
+    # Convert distances to predicted labels
+    predicted_labels = [0 if x >= threshold else 1 for x in real + fake]
+    # Actual labels are 1 for 'real' and 0 for 'fake'
+    actual_labels = [1] * len(real) + [0] * len(fake)
+    return accuracy_score(actual_labels, predicted_labels)
 
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -61,4 +83,8 @@ if __name__ == '__main__':
             total_iters += 1
             pbar.update()
 
-    print('The auc is %.3f'%(auc(real, fake)))
+    # print('The auc is %.3f'%(auc(real, fake)))
+    auc_score = auc(real, fake)
+    accuracy = compute_accuracy(real, fake)
+    print('The AUC is %.3f' % auc_score)
+    print('The accuracy is %.3f' % accuracy)
