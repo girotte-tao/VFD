@@ -60,14 +60,16 @@ def process_single_video(video_path, output_root):
 
     audio_target_file = os.path.join(audio_feat_dir, unique_filename + '.npy')
     frame_target_file = os.path.join(true_frames_dir, unique_filename + '.jpg')
+    # audio_test_file = os.path.join("/userhome/cs2/u3619712/FaceOff/evaluation/video_test", unique_filename + '.wav')
+    audio_test_file = os.path.join("/userhome/cs2/u3619712/FaceOff/evaluation/video_eval", unique_filename + '.wav')
 
     video = VideoFileClip(video_path)
     audio = video.audio
-    audio_temp_file = unique_filename + '.wav'
-    audio.write_audiofile(audio_temp_file, logger=None)
-
-    extract_mel_spectrogram(audio_temp_file, audio_target_file)
-    os.remove(audio_temp_file)
+    # audio_temp_file = unique_filename + '.wav'
+    audio.write_audiofile(audio_test_file, logger=None)
+    
+    extract_mel_spectrogram(audio_test_file, audio_target_file)
+    # os.remove(audio_temp_file)
     extract_frame_and_crop_face(video_path, frame_target_file)
 
     # print("Video processed successfully.")
@@ -131,7 +133,7 @@ def main(video_path, output_root):
 
 
 if __name__ == '__main__':
-    print(sys.argv)
+    # print(sys.argv)
 
     # real
     # video_path = '/userhome/cs2/u3619603/FakeAVCeleb/RealVideo-RealAudio/Asian (South)/men/id00032/00028.mp4'
